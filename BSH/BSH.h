@@ -22,12 +22,18 @@ private:
 
 public:
 	//BSH(const char* bshFileName);
-	BSH(const char* bshFileName, Palette* palette);
+	BSH(const char* bshFileName, const Palette& palette);
+	~BSH();
 
-	void setPalette(Palette* palette);
+	void setPalette(const Palette& palette);
 	///inline Palette* GetPalette() const { return m_palette; }
 	inline SPixel* GetPalettePixelArray() const { return m_pltPxl; }
+
+	// Adds an image to the SPixel array
 	void AddGfx(int width, int height, SPixel* PixelArray);
+
+	// Pre allocate memory size on known bsh-image-count
+	void AllocateMemorySize(size_t newSize);
 
 	SPixel GetAlphaPixel() const;
 	inline int GetGfxArraySize() const { return m_gfx_size; }

@@ -4,8 +4,7 @@
 
 int main()
 {
-
-	Palette* palette = new Palette(PALETTE_FILE);
+	Palette palette = Palette(PALETTE_FILE);
 	//palette->printPalette();
 
 	//BSH bsh("bsh_files/NUMBERS.BSH", palette);
@@ -20,6 +19,7 @@ int main()
 	//BSH bsh("bsh_files/TRAEGER.BSH", palette);
 
 	//BSH* bauship6 = new BSH("bsh_files/Bauship6.bsh", palette);
+	//BSHDebug::displayAllImages(bauship6);
 	//BSH* numbers = new BSH("bsh_files/NUMBERS.bsh", palette);
 	//BSH* symbol = new BSH("bsh_files/SYMBOL.bsh", palette);
 	//BSH* effekte = new BSH("bsh_files/EFFEKTE.bsh", palette);
@@ -38,7 +38,9 @@ int main()
 	stadtfld = new BSH("bsh_files/STADTFLD.bsh", palette);
 	//BSH* traeger = new BSH("bsh_files/TRAEGER.bsh", palette);
 
+	//BSHDebug::displayAllImages(bauship6);
 	//BSHDebug::displayAllImages(stadtfld);
+	//BSHDebug::displayAllImages(gaukler);
 
 	//BSHDebug::ShowBSHIdx(bauship6, 0);
 	//BSHDebug::ShowBSHIdx(bauship6, 1);

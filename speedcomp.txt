@@ -3,6 +3,28 @@ Benchmark read BSH files in debug x64 VS2022:
 
 (New) readBSH():
  - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.32s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.32s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.32s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.32s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+ - Read BSH offsets: 0.01s.
+Read BSH images in 0.33s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
+
+(Old) readBSH():
+ - Read BSH offsets: 0.01s.
 Read BSH images in 0.58s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
  - Read BSH offsets: 0.01s.
 Read BSH images in 0.56s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
@@ -23,26 +45,4 @@ Read BSH images in 0.60s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.0
  - Read BSH offsets: 0.01s.
 Read BSH images in 0.59s. fread{h:0.00s, b:0.00s}, struct:{alloc:0.00s, fill:0.00s}.
 
-(Old) readBSHOld():
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.79s. fread{h:0.00s, b:0.11s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.79s. fread{h:0.00s, b:0.13s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.77s. fread{h:0.00s, b:0.11s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.78s. fread{h:0.00s, b:0.11s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.82s. fread{h:0.00s, b:0.12s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.80s. fread{h:0.00s, b:0.12s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.83s. fread{h:0.00s, b:0.12s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.78s. fread{h:0.00s, b:0.12s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.81s. fread{h:0.00s, b:0.14s}, struct:{alloc:0.00s, fill:0.00s}.
- > Read BSH offsets: 0.01s.
-Read BSH images in 1.75s. fread{h:0.00s, b:0.09s}, struct:{alloc:0.00s, fill:0.00s}.
-
-Result: New function is ~3x faster
+Result: New function is ~70% faster

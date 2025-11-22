@@ -16,7 +16,7 @@ private:
 
 public:
 	Palette(const char* paletteFileName);
-	inline SPixel* getArray() const { return (SPixel*) m_palette; };
+	inline SPixel& getArray() const { return (SPixel&) m_palette; };
 	void printPalette();
 };
 

@@ -4,16 +4,23 @@
 #include "BSHFile.h"
 #include "BSHDebug.h"
 
-BSH::BSH(const char* bshFileName, Palette* palette)
+BSH::BSH(const char* bshFileName, const Palette& palette)
 {
 	setPalette(palette);
 	BSHFile* fileHandler = new BSHFile(bshFileName, this);
 	//loadBSH(bshFileName);
 }
 
-void BSH::setPalette(Palette* palette)
+BSH::~BSH()
 {
-	m_pltPxl = palette->getArray();
+	//while (m_gfx_size > 0)
+	//	free(&m_gfx[--m_gfx_size]);
+	//if (m_gfx != nullptr) delete[] m_gfx;
+}
+
+void BSH::setPalette(const Palette& palette)
+{
+	m_pltPxl = &palette.getArray();
 }
 
 void BSH::AddGfx(int width, int height, SPixel* PixelArray)
@@ -25,19 +32,26 @@ void BSH::AddGfx(int width, int height, SPixel* PixelArray)
 
 		if (tmp)
 		{
-			++m_gfx_size;
 			++m_gfx_sizeAllocated;
 			m_gfx = tmp;
 		}
 	}
 
-	//STileTypeInfo* ref = ParentId == -1 ? &m_Defaults_TileTypeInfo : &m_TileTypes[ParentId];
-	//memcpy(&m_TileTypes[m_TileTypes_size - 1], &m_Defaults_TileTypeInfo, sizeof(STileTypeInfo));
-	//memcpy(&m_TileTypes[m_TileTypes_size - 1], ParentId == -1 ? &m_Defaults_TileTypeInfo : &m_TileTypes[ParentId], sizeof(STileTypeInfo));
+	m_gfx[m_gfx_size++] = SGfx(width, height, PixelArray);
+}
 
-	m_gfx[m_gfx_size - 1] = SGfx(width, height, PixelArray);
-
-	///memcpy(&m_TileTypes[m_TileTypes_size - 1], ParentId != -1 && ParentId < (m_TileTypes_size - 1) ? &m_TileTypes[ParentId] : &m_Defaults_TileTypeInfo, sizeof(STileTypeInfo));
+void BSH::AllocateMemorySize(size_t newSize)
+{
+	if (newSize != m_gfx_sizeAllocated)
+	{
+		SGfx* tmp = (SGfx*)(m_gfx_size > 0 ? realloc(m_gfx, newSize * sizeof(SGfx)) : malloc(newSize * sizeof(SGfx)));
+		
+		if (tmp)
+		{
+			m_gfx = tmp;
+			m_gfx_sizeAllocated = (int)newSize;
+		}
+	}
 }
 
 SPixel BSH::GetAlphaPixel() const

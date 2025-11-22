@@ -13,7 +13,6 @@ private:
 	BSH* m_BSH = nullptr;
 
 	void readBSH(const char* fileName);
-	void readBSHOld(const char* fileName); // Slow method, remove
 
 };
 
