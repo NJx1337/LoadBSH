@@ -2,13 +2,7 @@
 
 #include "Palette.h"
 #include "BSHFile.h"
-
-//BSH::BSH(const char* bshFileName)
-//{
-//	BSHFile* fileHandler = new BSHFile(bshFileName, this);
-//
-//	//loadBSH(bshFileName);
-//}
+#include "BSHDebug.h"
 
 BSH::BSH(const char* bshFileName, Palette* palette)
 {

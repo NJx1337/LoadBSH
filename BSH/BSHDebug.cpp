@@ -23,3 +23,12 @@ void BSHDebug::ShowBSHIdx(BSH* bshIn, int idx)
 
 	img.display("img8 test");
 }
+
+void BSHDebug::displayAllImages(BSH* bshIn)
+{
+	for (int i = 0; i < bshIn->GetGfxArraySize(); i++)
+	{
+		//m_images[i].GetCImg().display("img8 displayAllImages()");
+		ShowBSHIdx(bshIn, i);
+	}
+}

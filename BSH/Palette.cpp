@@ -8,6 +8,8 @@ void Palette::readPalette(const char* paletteFileName)
 
 	f.open(paletteFileName, std::ifstream::binary);
 	if (f.is_open()) {
+		// read bytes with ifstream: https://stackoverflow.com/questions/11162608/reading-bytes-with-ifstream
+
 		f.seekg(PALETTE_HEADER_LENGTH, f.beg); // skip 20 bytes
 		for (int i = 0; i < sizeof(m_palette) / sizeof(m_palette[0]); i++) // Loop through bytes
 		{
@@ -34,9 +36,7 @@ void Palette::printPalette()
 	for (int i = 0; i < sizeof(m_palette); i++)
 	{
 		if (i > 0) printf(", ");;
-		printf("0x%.2X", m_palette[i].r);
-		printf("%.2X", m_palette[i].g);
-		printf("%.2X", m_palette[i].b);
+		printf("0x%.8X", m_palette[i]);
 	}
 
 	printf(";\n");

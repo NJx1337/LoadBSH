@@ -8,5 +8,6 @@ class BSHDebug
 {
 public:
 	static void ShowBSHIdx(BSH* bshIn, int idx);
+	static void displayAllImages(BSH* bshIn);
 };
 

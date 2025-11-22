@@ -6,7 +6,6 @@
 
 #define BSH_HEADER_LENGTH 20
 
-class Image8;
 class Palette;
 //class BSHFile;
 
@@ -27,12 +26,11 @@ public:
 
 	void setPalette(Palette* palette);
 	///inline Palette* GetPalette() const { return m_palette; }
-	void AddGfx(int width, int height, SPixel* PixelArray);
 	inline SPixel* GetPalettePixelArray() const { return m_pltPxl; }
-	inline int GetGfxArraySize() const { return m_gfx_size; }
+	void AddGfx(int width, int height, SPixel* PixelArray);
 
 	SPixel GetAlphaPixel() const;
-
+	inline int GetGfxArraySize() const { return m_gfx_size; }
 	inline SGfx GetGfxId(int Idx) const { return m_gfx[Idx]; }
 };
 
