@@ -16,6 +16,10 @@ void BSHDebug::ShowBSHIdx(BSH* bshIn, int idx)
 			//int pixelID = y * gfx.Width + x;
 			int idx = gfx.Width * y + x;
 			const SPixel& px = gfx.PixelArray[idx];
+			if (y == 0 && x < 2)
+			{
+				printf("0x%.2X%.2X%.2X\n", px.r, px.g, px.b);
+			}
 			const float color[] = { (float)px.r, (float)px.g, (float)px.b };
 			img.draw_point(x, y, color);
 		}

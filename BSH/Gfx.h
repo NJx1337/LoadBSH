@@ -1,6 +1,8 @@
 #pragma once
 #include <widemath.h>
 
+#define C_SPIXEL_DEFAULT 0xFF00FF // Default value (standard alpha)
+
 struct SPixel
 {
 	uint8_t r;
@@ -8,7 +10,7 @@ struct SPixel
 	uint8_t b;
 
 	SPixel()
-		: r(111), g(0), b(0)
+		: r(255), g(0), b(255)
 	{
 	}
 	SPixel(uint8_t r_in, uint8_t g_in, uint8_t b_in)

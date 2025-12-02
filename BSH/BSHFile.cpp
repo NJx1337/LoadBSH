@@ -57,33 +57,66 @@ void BSHFile::readBSH(const char* fileName)
 		f.read(rawBsh, ((int)fsize - BSH_HEADER_LENGTH) * sizeof(std::streampos) + 1);
 
 		// List of offsets to all images
-		std::vector<int> offsetlist;
+		//std::vector<int> offsetlistOld;
+		int* offsetList = nullptr; // Offset positions in data
+		int offsetList_size = 0; // Size of Array with Offsets
+		int offsetList_sizeAllocated = 1024; // Offset-ArraySize that is preallocated in memory
+
+		offsetList = (int*)malloc(sizeof(int) * offsetList_sizeAllocated);
+
+		// - Get all other image offsets
+		// Get offsets until just before the position of the first offset (this is where images begin)
+		for (int offset; offsetList_size == 0 || pos + sizeof(offset) <= offsetList[0];)
+		{
+			if ((offsetList_size + 1) >= offsetList_sizeAllocated)
+			{
+				offsetList_sizeAllocated += 1024;
+				offsetList = (int*) realloc(offsetList, offsetList_sizeAllocated * sizeof(SGfx));
+				//printf(" > realoc offset size: %d\n", offsetList_sizeAllocated);
+			}
+			//f.read(reinterpret_cast<char*>(&offset), sizeof(offset));
+			//offset += BSH_HEADER_LENGTH;
+			memcpy(&offset, rawBsh + pos, sizeof(offset));
+			offsetList[offsetList_size++] = offset;
+			pos += sizeof(offset);
+		}
+
+		if (offsetList_size != offsetList_sizeAllocated)
+		{
+			offsetList_sizeAllocated = offsetList_size;
+			offsetList = (int*)realloc(offsetList, offsetList_sizeAllocated * sizeof(SGfx));
+			//printf(" > realoc offset size: %d\n", offsetList_sizeAllocated);
+		}
+
+		//offsetList_sizeAllocated += 1024;
+		//offsetList = (int*) realloc(offsetList, offsetList_sizeAllocated * sizeof(SGfx));
 
 		// Load offsets of all images
 		// - Get first offset
 		//ToDo:Make the code more compact
-		int firstoffset; // Get first offset
-		memcpy(&firstoffset, rawBsh + pos, sizeof(int));
-		pos += sizeof(int);
+	//	int firstoffset; // Get first offset
+	//	memcpy(&firstoffset, rawBsh + pos, sizeof(int));
+	//	pos += sizeof(int);
 		//f.read(reinterpret_cast<char*>(&firstoffset), sizeof(firstoffset));
 		//firstoffset += BSH_HEADER_LENGTH;
 
-		offsetlist.push_back(firstoffset);
+	//	offsetlistOld.push_back(firstoffset);
 
 		// - Get all other image offsets
 		//for (int offset; (int)f.tellg() + sizeof(offset) <= firstoffset;)
-		for (int offset; pos + sizeof(offset) <= firstoffset;)
-		{
-			//f.read(reinterpret_cast<char*>(&offset), sizeof(offset));
-			memcpy(&offset, rawBsh + pos, sizeof(offset));
-			//offset += BSH_HEADER_LENGTH;
-			pos += sizeof(offset);
-
-			offsetlist.push_back(offset);
-		}
+	//	for (int offset; pos + sizeof(offset) <= firstoffset;)
+	//	{
+	//		//f.read(reinterpret_cast<char*>(&offset), sizeof(offset));
+	//		memcpy(&offset, rawBsh + pos, sizeof(offset));
+	//		//offset += BSH_HEADER_LENGTH;
+	//		pos += sizeof(offset);
+	//
+	//		offsetlistOld.push_back(offset);
+	//	}
 		auto end0 = std::chrono::high_resolution_clock::now();
 		duration0 = (double)std::chrono::duration_cast<std::chrono::milliseconds>(end0 - start0).count() / 1000;
-		printf(" - Read BSH offsets: %.2lfs.\n", duration0);
+		//printf(" - Read %d BSH offsets: %.2lfs.\n", offsetlistOld.size(), duration0);
+		printf(" - Read %d BSH offsets: %.2lfs.\n", offsetList_size, duration0);
 
 		double duration1 = 0;
 		auto start1 = std::chrono::high_resolution_clock::now();
@@ -103,15 +136,30 @@ void BSHFile::readBSH(const char* fileName)
 		//	printf(" 0x%04X\n", offsetlist[i] + BSH_HEADER_LENGTH);
 		//}
 
-		m_BSH->AllocateMemorySize(offsetlist.size());
+		//m_BSH->AllocateMemorySize(offsetlistOld.size());
+		m_BSH->AllocateMemorySize(offsetList_size);
 
 		const SPixel& alphaPixel = m_BSH->GetAlphaPixel();
+		uint32_t alphaPixel32 = (((uint32_t)alphaPixel.r << 16) | ((uint32_t)alphaPixel.g << 8) | (uint32_t)alphaPixel.b);
+
+		// Copy alphaPixel into a big array, for optimization reasons
+		// of filling pixel structs of each image later:
+		//const int alphaPixelArray_size = 4096 * 10;
+		//const int alphaPixelArray_size = 1024;
+		const int alphaPixelArray_size = 4096;
+		SPixel* alphaPixelArray = (SPixel*)malloc(alphaPixelArray_size * sizeof(SPixel));
+		for (int i = 0; i < alphaPixelArray_size; ++i)
+		{
+			memcpy(alphaPixelArray + i, &alphaPixel, sizeof(alphaPixel));
+		}
 
 		// Read images:
-		for (int i = 0; i < offsetlist.size(); i++)
+		//for (int i = 0; i < offsetlistOld.size(); i++)
+		for (int i = 0; i < offsetList_size; i++)
 		{
 			start1 = std::chrono::high_resolution_clock::now();
-			pos = offsetlist[i];
+			//pos = offsetlistOld[i];
+			pos = offsetList[i];
 			//f.seekg(offsetlist[i], f.beg);
 			int x = 0;
 			int y = 0;
@@ -139,7 +187,8 @@ void BSHFile::readBSH(const char* fileName)
 			if (width <= 0 || height <= 0)
 			{
 				printf("Invalid image size!\n");
-				printf(" 0x%04X\n", offsetlist[i] + BSH_HEADER_LENGTH);
+				//printf(" 0x%04X\n", offsetlistOld[i] + BSH_HEADER_LENGTH);
+				printf(" 0x%04X\n", offsetList[i] + BSH_HEADER_LENGTH);
 				return;
 			}
 
@@ -148,6 +197,25 @@ void BSHFile::readBSH(const char* fileName)
 
 			start2 = std::chrono::high_resolution_clock::now();
 			SPixel* pxArray = (SPixel*)malloc(width * height * sizeof(SPixel)); // allocate for known image with width & height
+
+			// Optimized initialisation of alpha pixels over the whole pxArray
+			// If pixel-size is bigger than the buffer of the alphaPxArr, it
+			// will be splitted up into multiple memcpy operations.
+			int offset = 0;
+			for (int i = width * height; i > 0; i -= alphaPixelArray_size)
+			{
+				int size = (i - alphaPixelArray_size) > 0 ? alphaPixelArray_size : alphaPixelArray_size + i - alphaPixelArray_size;
+				memcpy(pxArray + offset, alphaPixelArray, size * sizeof(alphaPixel));
+				//printf(">>Init: %d-%d of %d: size: %d\n", offset, size+offset, width * height, size);
+				offset += size;
+			}
+			//memcpy(pxArray, alphaPixelArray, width* height * sizeof(alphaPixel));
+
+			//for (int i = 0; i < width * height; ++i)
+			//{
+			//	memcpy(pxArray + i, &alphaPixel, sizeof(alphaPixel));
+			//}
+			
 			end2 = std::chrono::high_resolution_clock::now();
 			duration2 += (double)std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count() / 1000;
 
@@ -171,28 +239,45 @@ void BSHFile::readBSH(const char* fileName)
 				{
 					if (x < width)
 					{
-						// Add remaining alpha pixels in current y row
-						for (; x < width; ++x)
+						// Optimization, do not do alpha checks when alpha-color is the same than initial SPixel value
+						if (alphaPixel32 == C_SPIXEL_DEFAULT)
 						{
-							int idx = width * y + x;
-							pxArray[idx] = alphaPixel;
+							x = width;
 						}
-
-					}
-					++y; // Increment y by one to prevent overwriting previous row.
-					if (y < height)
-					{
-						// Add remaining alpha pixels in current y row
-						for (; y < height; ++y)
+						else
 						{
-							for (x = 0; x < width; ++x)
+							// Add remaining alpha pixels in current y row
+							for (; x < width; ++x)
 							{
 								int idx = width * y + x;
-								//printf("%d\n", y);
 								pxArray[idx] = alphaPixel;
 							}
 						}
 
+					}
+					++y; // Increment y by one to prevent overwriting previous row.
+
+					// Optimization, do not do alpha checks when alpha-color is the same than initial SPixel value
+					if (alphaPixel32 == C_SPIXEL_DEFAULT)
+					{
+						y = height;
+						x = width;
+					}
+					else
+					{
+						if (y < height)
+						{
+							// Add remaining alpha pixels in current y row
+							for (; y < height; ++y)
+							{
+								for (x = 0; x < width; ++x)
+								{
+									int idx = width * y + x;
+									//printf("%d\n", y);
+									pxArray[idx] = alphaPixel;
+								}
+							}
+						}
 					}
 
 					break;
@@ -201,15 +286,23 @@ void BSHFile::readBSH(const char* fileName)
 				// End of row
 				if (numAlpha == 254)
 				{
-					if (x < width)
+					// Optimization, do not do alpha checks when alpha-color is the same than initial SPixel value
+					if (alphaPixel32 == C_SPIXEL_DEFAULT)
 					{
-						// Add remaining alpha pixels in current y row
-						for (; x < width; ++x)
+						x = width;
+					}
+					else
+					{
+						if (x < width)
 						{
-							int idx = width * y + x;
-							pxArray[idx] = alphaPixel;
-						}
+							// Add remaining alpha pixels in current y row
+							for (; x < width; ++x)
+							{
+								int idx = width * y + x;
+								pxArray[idx] = alphaPixel;
+							}
 
+						}
 					}
 
 					x = 0;
@@ -217,12 +310,20 @@ void BSHFile::readBSH(const char* fileName)
 					continue;
 				}
 
-				// Pixel data
-				for (int i = 0; i < numAlpha; ++i)
+				// Optimization, do not do alpha checks when alpha-color is the same than initial SPixel value
+				if (alphaPixel32 == C_SPIXEL_DEFAULT)
 				{
-					int idx = width * y + x;
-					pxArray[idx] = alphaPixel;
-					++x;
+					x += numAlpha;
+				}
+				else
+				{
+					// Pixel data
+					for (int i = 0; i < numAlpha; ++i)
+					{
+						int idx = width * y + x;
+						pxArray[idx] = alphaPixel;
+						++x;
+					}
 				}
 
 				// Get color pixel:
@@ -241,7 +342,8 @@ void BSHFile::readBSH(const char* fileName)
 					pos += sizeof(char);
 
 					int idx = width * y + x;
-					pxArray[idx] = pltpx[clrIdx];
+					memcpy(pxArray + idx, &pltpx[clrIdx], sizeof(pltpx[clrIdx]));
+					//pxArray[idx] = pltpx[clrIdx];
 
 					++x;
 				}
@@ -257,6 +359,7 @@ void BSHFile::readBSH(const char* fileName)
 			duration4 += (double)std::chrono::duration_cast<std::chrono::milliseconds>(end4 - start4).count() / 1000;
 		}
 
+		free(offsetList);
 		free(rawBsh);
 		free(rawBshHeader);
 

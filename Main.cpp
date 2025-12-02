@@ -18,7 +18,7 @@ int main()
 	//BSH bsh("bsh_files/TIERE.BSH", palette);
 	//BSH bsh("bsh_files/TRAEGER.BSH", palette);
 
-	//BSH* bauship6 = new BSH("bsh_files/Bauship6.bsh", palette);
+	BSH* bauship6 = new BSH("bsh_files/Bauship6.bsh", palette);
 	//BSHDebug::displayAllImages(bauship6);
 	//BSH* numbers = new BSH("bsh_files/NUMBERS.bsh", palette);
 	//BSH* symbol = new BSH("bsh_files/SYMBOL.bsh", palette);
@@ -38,7 +38,7 @@ int main()
 	stadtfld = new BSH("bsh_files/STADTFLD.bsh", palette);
 	//BSH* traeger = new BSH("bsh_files/TRAEGER.bsh", palette);
 
-	//BSHDebug::displayAllImages(bauship6);
+	BSHDebug::displayAllImages(bauship6);
 	//BSHDebug::displayAllImages(stadtfld);
 	//BSHDebug::displayAllImages(gaukler);
 
