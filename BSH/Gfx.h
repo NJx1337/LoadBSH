@@ -21,21 +21,27 @@ struct SPixel
 
 struct SGfx
 {
-	int Width;
-	int Height;
+	uint16_t Width;
+	uint16_t Height;
 	SPixel* PixelArray;
 
 	//SGfx()
 	//	: Width(1), Height(1), PixelArray(nullptr)
 	//{}
 
-	SGfx(int _Width, int _Height)
+	SGfx(uint16_t _Width, uint16_t _Height)
 		: Width(_Width), Height(_Height), PixelArray(nullptr)
 	{
 		//mem alloc w*h
 	}
 
-	SGfx(int _Width, int _Height, SPixel* _PixelArray)
+	SGfx(uint16_t _Width, uint16_t _Height, SPixel* _PixelArray)
 		: Width(_Width), Height(_Height), PixelArray(_PixelArray)
 	{ }
+
+	// 3 color
+	uint8_t* GetPixelArrayRaw()
+	{
+		return (uint8_t*) PixelArray;
+	}
 };

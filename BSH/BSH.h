@@ -37,6 +37,7 @@ public:
 
 	SPixel GetAlphaPixel() const;
 	inline int GetGfxArraySize() const { return m_gfx_size; }
-	inline SGfx GetGfxId(int Idx) const { return m_gfx[Idx]; }
+	inline SGfx& GetGfxId(int Idx) const { return m_gfx[Idx]; }
+	inline SPixel& GetPaletteTMP() const { return *m_pltPxl; }
 };
 

@@ -14,5 +14,9 @@ private:
 
 	void readBSH(const char* fileName);
 
+	// Reads Images from BSH file:
+	void readImagesPixelArray(); // Store images in traditional Pixelarray (RGBA/pixel)
+	void readImagesPixelLines(); // Store only visible pixel of images in lines (RGBA/pixel)
+
 };
 

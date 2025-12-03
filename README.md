@@ -3,11 +3,11 @@ A program to load .bsh files from the game Anno 1602 on runtime speed.
 This is a very early code. A lot will change!
 
 ## What it can do
-- Loads "Gfx" textures from .bsh files, so they can used further
+- Loads textures from .bsh files into a "Gfx"-structure array
 - Loads .col palette file
 - Converts 8 bit optimized palette pixels from .bsh file to 24 bit bitmap pixels
-- Prints loaded palette to console for debugging
-- Show Gfx in a window with Cimg library for debugging
+- Can print loaded palette to console for debugging
+- Can visualize Gfx in a Cimg-window
 
 ## How to run
 1. The project was made in VS 2022. It is the safest way to compile it there sucessfully.
@@ -17,16 +17,16 @@ This is a very early code. A lot will change!
 
 ## ToDo
 - A lot faster and efficient .bsh parsing
-- Even mooore C
+- Even mooore simple C methods to optimize efficiency
 - More Gfx information
 - Multiversion support (+ Multilanguage)
 - Multiplatform support (+ CMake)
-- Merge this project into an even bigger one (that can do more, from doing some simple representations of game stuff, to even rendering, have I mentioned: I love game design! ;-) )
+- Merge this project into an even bigger one (that can do more, from doing some simple animated Gfx, to even rendering)
 
 ## Dependencies
 ### CImg
 https://github.com/GreycLab/CImg
-CImg is used for developing and testing purposes. It is a great single header tool to quickly show image content to the user.
+CImg is used only for testing purposes. It is a great single header tool to quickly show image content to the user.
 It can be removed from the code and is not necesary for basic loading of .bsh and .col files.
 
 ## FAQ
@@ -42,8 +42,8 @@ Currently I am focussing on the core functionality and not on compatiblity. Sinc
 ### 4. Why you dont use CMake, Make etc?
 Currently I am focussing on the core functionality and not on compatiblity.
 
-### 5. Why do you prefer using C over C++ or other new languages like C#?
-I like to be closer to machine code, thats why I prefer using C.
+### 5. Why do you prefer using old C code over newer C++ functions or other new languages like C#?
+I like to be closer to machine code, thats why I prefer using C. I love to do things as efficient as possible, in terms of performance and ressource usage. I come from electronics engineer background, so I learned to keep code small and optimized from programming Micro-Controllers (Atmel, stm32, ...).
 Languages as C++, Rust, C# are fine as well, but I do believe they make us programmers lazy because of using a lot of predefined functions and dependencies, that will make programs heavy and harder to maintain on multiple platforms.
 
 ### 6. I want to use the entire code or parts in my own software. Are there any requirements?
@@ -56,8 +56,6 @@ I am using the Anno 1602 Version from GoG in English, planning to add all other 
 This might be a possible added feature in newer versions. Feel free to use this code as a base to create code which can manipulate and save .BSH files.
 
 ### 9. Whats the goal with this project?
-Make this project run on Windows 95 and VS 6.0. Just joking: ;-)
-
-My goal is to have fun for myself and also make the available to others, so people can learn from it. And a serious goal is to make it as perfect as possible in reading game files: Read everything from the game files, to have no need to manually define stuff.
+My goal is to have fun for myself and also make the available to others, so people can learn from it. 
 
 If I find more free time for this project, there might come more in future. :-)

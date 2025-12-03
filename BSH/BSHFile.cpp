@@ -368,3 +368,16 @@ void BSHFile::readBSH(const char* fileName)
 		printf("Read BSH images in %.2lfs. fread{h:%.2lfs, b:%.2lfs}, struct:{alloc:%.2lfs, fill:%.2lfs}.\n", (duration_t), duration1, duration3, duration2, duration4);
 	}
 }
+
+void BSHFile::readImagesPixelArray()
+{
+
+}
+
+void BSHFile::readImagesPixelLines()
+{
+	// 4 Byte start array coordinate, 2 Byte num of pixel, pixelLine array (RGB. A is
+	// skipped, since we assume everything that is not defined is alpha)
+	// Fastest method to copy pixel into the renderer-system (memcpy)
+
+}
